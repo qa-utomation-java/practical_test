@@ -1,10 +1,9 @@
 package com.practical.framework.rest;
 
+import com.practical.framework.Configuration;
 import com.practical.framework.entity.PaymentMethod;
 import com.practical.framework.entity.PaymentWrapper;
 import org.springframework.http.ResponseEntity;
-
-import static com.practical.framework.Configuration.BASE_URL;
 
 /**
  * Created by sergey on 5/27/16.
@@ -13,15 +12,19 @@ public class PaymentRest {
 
     private RestClient restClient;
 
+    public PaymentRest() {
+        this.restClient = new RestClient(Configuration.BASE_URL);
+    }
+
     public ResponseEntity<PaymentWrapper> buyCoins(PaymentMethod method) {
-        return buyCoins(method, null);
+        return restClient.get("/buyCoins/?method={method}", PaymentWrapper.class, method);
     }
 
     public ResponseEntity<PaymentWrapper> buyCoins(int amount) {
-        return buyCoins(null, amount);
+        return restClient.get("/buyCoins/?amount={amount}", PaymentWrapper.class, amount);
     }
 
-    public ResponseEntity<PaymentWrapper> buyCoins(PaymentMethod method, Integer amount) {
-        return restClient.get(BASE_URL + "/buyCoins/?method={method}&amount={amount}", PaymentWrapper.class, method, amount);
+    public ResponseEntity<PaymentWrapper> buyCoins(PaymentMethod method, int amount) {
+        return restClient.get("/buyCoins/?method={method}&amount={amount}", PaymentWrapper.class, method, amount);
     }
 }
