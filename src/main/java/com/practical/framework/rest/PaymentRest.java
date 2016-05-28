@@ -1,9 +1,10 @@
 package com.practical.framework.rest;
 
-import com.practical.framework.Configuration;
 import com.practical.framework.entity.PaymentMethod;
 import com.practical.framework.entity.PaymentWrapper;
 import org.springframework.http.ResponseEntity;
+
+import static com.practical.framework.PropertiesLoader.getConfig;
 
 /**
  * Created by sergey on 5/27/16.
@@ -16,7 +17,7 @@ public class PaymentRest {
     public static final String COINS = "/coins/";
 
     public PaymentRest() {
-        this.restClient = new RestClient(Configuration.BASE_URL);
+        this.restClient = new RestClient(getConfig().getBaseUrl());
     }
 
     public ResponseEntity<PaymentWrapper> buyCoins(PaymentMethod method) {
