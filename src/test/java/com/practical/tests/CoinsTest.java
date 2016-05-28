@@ -4,6 +4,7 @@ import com.practical.framework.entity.PaymentWrapper;
 import com.practical.framework.rest.PaymentRest;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 
 import static com.practical.framework.matchers.ResponseMatchers.hasStatus;
 import static com.practical.framework.matchers.ResponseMatchers.withPaymentAmount;
@@ -71,5 +72,20 @@ public class CoinsTest {
         ResponseEntity<PaymentWrapper> response = paymentRest.coins(Integer.MAX_VALUE);
         assertThat(response, hasStatus(OK));
         assertThat(response, withPaymentAmount(10014.400000000001));
+    }
+
+    @Test(expected = HttpClientErrorException.class)
+    public void shouldBeHttpClientErrorIfAmountDouble() {
+        paymentRest.coins(10.2);
+    }
+
+    @Test(expected = HttpClientErrorException.class)
+    public void shouldBeHttpClientErrorIfAmountString()  {
+        paymentRest.coins("'1'");
+    }
+
+    @Test(expected = HttpClientErrorException.class)
+    public void shouldBeHttpClientErrorIfAmountIsALetter()  {
+        paymentRest.coins("a");
     }
 }

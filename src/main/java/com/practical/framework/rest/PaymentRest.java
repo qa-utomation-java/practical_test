@@ -32,7 +32,7 @@ public class PaymentRest {
         return restClient.get(BUY_COINS + "?method={method}&amount={amount}", PaymentWrapper.class, method, amount);
     }
 
-    public ResponseEntity<PaymentWrapper> coins(int amount) {
+    public ResponseEntity<PaymentWrapper> coins(Object amount) {
         return restClient.get(COINS+"?&amount={amount}", PaymentWrapper.class, amount);
     }
 }
