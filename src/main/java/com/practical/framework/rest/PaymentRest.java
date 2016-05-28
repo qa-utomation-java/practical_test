@@ -27,4 +27,8 @@ public class PaymentRest {
     public ResponseEntity<PaymentWrapper> buyCoins(PaymentMethod method, int amount) {
         return restClient.get("/buyCoins/?method={method}&amount={amount}", PaymentWrapper.class, method, amount);
     }
+
+    public ResponseEntity<PaymentWrapper> coins(int amount) {
+        return restClient.get("/coins/?&amount={amount}", PaymentWrapper.class, amount);
+    }
 }

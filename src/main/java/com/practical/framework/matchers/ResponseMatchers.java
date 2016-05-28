@@ -60,7 +60,10 @@ public class ResponseMatchers {
 
             @Override
             protected boolean matchesSafely(ResponseEntity<PaymentWrapper> item) {
-                return item != null && item.getBody().getPayment().getError().equals(errorMsg);
+                if(item == null || item.getBody().getPayment().getError() == null){
+                    return false;
+                }
+                return item.getBody().getPayment().getError().equals(errorMsg);
             }
 
             @Override
