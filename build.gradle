@@ -39,6 +39,7 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
+    systemProperties System.properties
 }
 
 tasks.withType(Test)*.finalizedBy allureReport
