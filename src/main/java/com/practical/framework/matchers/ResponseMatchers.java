@@ -1,11 +1,15 @@
 package com.practical.framework.matchers;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practical.framework.entity.PaymentWrapper;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import ru.yandex.qatools.allure.annotations.Attachment;
 
 /**
  * Created by sergey on 5/27/16.
@@ -46,6 +50,7 @@ public class ResponseMatchers {
             @Override
             protected void describeMismatchSafely(ResponseEntity<PaymentWrapper> item, Description mismatchDescription) {
                 mismatchDescription.appendText("was ").appendValue(item.getBody().getPayment().getAmount());
+                restResponse(item.getBody());
             }
 
             @Override
@@ -69,6 +74,7 @@ public class ResponseMatchers {
             @Override
             protected void describeMismatchSafely(ResponseEntity<PaymentWrapper> item, Description mismatchDescription) {
                 mismatchDescription.appendText("was ").appendValue(item.getBody().getPayment().getError());
+                restResponse(item.getBody());
             }
 
             @Override
@@ -76,5 +82,17 @@ public class ResponseMatchers {
                 description.appendText("payment error ").appendValue(errorMsg);
             }
         };
+    }
+
+    @Attachment(value="json",type = "application/json")
+    private static String restResponse(PaymentWrapper wrapper){
+        ObjectMapper om = new ObjectMapper();
+        om.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        try {
+            return om.writeValueAsString(wrapper);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
