@@ -8,15 +8,22 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import sun.misc.IOUtils;
+import sun.nio.ch.IOUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.logging.Logger;
+
+import static org.apache.commons.io.IOUtils.toString;
 
 /**
  * Created by sergey on 5/27/16.
  */
 public class PaymentHttpMsgConverter extends AbstractHttpMessageConverter<PaymentWrapper> {
+
+    private static final Logger LOGGER = Logger.getLogger("Payment Converter");
 
     public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 
@@ -34,7 +41,9 @@ public class PaymentHttpMsgConverter extends AbstractHttpMessageConverter<Paymen
     @Override
     protected PaymentWrapper readInternal(Class<? extends PaymentWrapper> clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
         InputStream body = inputMessage.getBody();
-        return objectMapper.readValue(body, PaymentWrapper.class);
+        String json = org.apache.commons.io.IOUtils.toString(body);
+        LOGGER.info(json);
+        return objectMapper.readValue(json, PaymentWrapper.class);
     }
 
     @Override
