@@ -19,7 +19,7 @@ public class BuyCoinsIdealTest {
     private PaymentRest paymentRest = new PaymentRest();
 
     @Test
-    //Probably bug, because amount is 0.
+    //Probably bug, because amount of coins to buy is 0.
     public void shouldBe1UahPaymentIfMethodIdealAndNoAmount() {
         ResponseEntity<PaymentWrapper> response = paymentRest.buyCoins(IDEAL, 0);
         assertThat(response, hasStatus(OK));
@@ -27,23 +27,37 @@ public class BuyCoinsIdealTest {
     }
 
     @Test
-    public void shouldBePaymentWithoutFeeIfMethodIdealAndAmountLess25Uah() {
-        ResponseEntity<PaymentWrapper> response = paymentRest.buyCoins(IDEAL, 164);
+    public void shouldBePaymentWithAdditionalCostIfMethodIdealAndAmountLessThen25Uah() {
+        int amount = 164;
+        int ADDITIONAL_COST = 1;
+        double coinsPrice = getCoinsPrice(amount) + ADDITIONAL_COST;
+
+        ResponseEntity<PaymentWrapper> response = paymentRest.buyCoins(IDEAL, amount);
         assertThat(response, hasStatus(OK));
-        assertThat(response, withPaymentAmount(25.9));
+        assertThat(response, withPaymentAmount(coinsPrice));
     }
 
     @Test
-    public void shouldBePaymentWithoutFeeIfMethodIdealAndAmountIs25Uah() {
-        ResponseEntity<PaymentWrapper> response = paymentRest.buyCoins(IDEAL, 165);
+    public void shouldBePaymentWithoutAdditionalCostIfMethodIdealAndAmountIs25Uah() {
+        int amount = 165;
+        double coinsPrice = getCoinsPrice(amount);
+
+        ResponseEntity<PaymentWrapper> response = paymentRest.buyCoins(IDEAL, amount);
         assertThat(response, hasStatus(OK));
-        assertThat(response, withPaymentAmount(25));
+        assertThat(response, withPaymentAmount(coinsPrice));
     }
 
     @Test
-    public void shouldBePaymentWithoutFeeIfMethodIdealAndAmountMore25Uah() {
-        ResponseEntity<PaymentWrapper> response = paymentRest.buyCoins(IDEAL, 166);
+    public void shouldBePaymentWithoutAdditionalCostIfMethodIdealAndAmountMore25Uah() {
+        int amount = 166;
+        double coinsPrice = getCoinsPrice(amount);
+
+        ResponseEntity<PaymentWrapper> response = paymentRest.buyCoins(IDEAL, amount);
         assertThat(response, hasStatus(OK));
-        assertThat(response, withPaymentAmount(25.1));
+        assertThat(response, withPaymentAmount(coinsPrice));
+    }
+
+    private double getCoinsPrice(int amount) {
+        return paymentRest.coins(amount).getBody().getPayment().getAmount();
     }
 }

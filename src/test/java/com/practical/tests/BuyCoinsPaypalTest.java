@@ -27,14 +27,14 @@ public class BuyCoinsPaypalTest {
     }
 
     @Test
-    public void shouldBeAmountIfMethodPaypalAndAmountSumMore20Uah() {
+    public void shouldBeAmountIfMethodPaypalAndAmountSumMoreThan20Uah() {
         ResponseEntity<PaymentWrapper> response = paymentRest.buyCoins(PAYPAL,116);
         assertThat(response, hasStatus(OK));
         assertThat(response, withPaymentAmount(20.1));
     }
 
     @Test
-    public void shouldBeAmountIfMethodPaypalAndAmountSumLess20Uah() {
+    public void shouldBeAmountIfMethodPaypalAndAmountSumLessThan20Uah() {
         ResponseEntity<PaymentWrapper> response = paymentRest.buyCoins(PAYPAL,114);
         assertThat(response, hasStatus(OK));
         assertThat(response, withPaymentError("Your amount is too low"));

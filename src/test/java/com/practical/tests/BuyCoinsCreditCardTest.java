@@ -56,6 +56,17 @@ public class BuyCoinsCreditCardTest {
     }
 
     @Test
+    public void shouldBePaymentWithFeeIfMethodCCAndAmountIs50() {
+        int amount = 415;
+        double fee = 0.01;
+        double expectedAmount = getCoinsPriceWithFee(amount,fee);
+
+        ResponseEntity<PaymentWrapper> response = paymentRest.buyCoins(CREDITCARD, amount);
+        assertThat(response, hasStatus(OK));
+        assertThat(response, withPaymentAmount(expectedAmount));
+    }
+
+    @Test
     public void shouldBePaymentWithFeeIfMethodCCAndAmountMoreThan50() {
         int amount = 416;
         double fee = 0.00;
