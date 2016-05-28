@@ -20,7 +20,7 @@ public class BuyCoinsIdealTest {
 
     @Test
     //Probably bug, because amount of coins to buy is 0.
-    public void shouldBe1UahPaymentIfMethodIdealAndNoAmount() {
+    public void shouldBe0UahPaymentIfMethodIdealAndNoAmount() {
         ResponseEntity<PaymentWrapper> response = paymentRest.buyCoins(IDEAL, 0);
         assertThat(response, hasStatus(OK));
         assertThat(response, withPaymentAmount(0.0));
