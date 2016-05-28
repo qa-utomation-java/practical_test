@@ -12,23 +12,26 @@ public class PaymentRest {
 
     private RestClient restClient;
 
+    public static final String BUY_COINS = "/buyCoins/";
+    public static final String COINS = "/coins/";
+
     public PaymentRest() {
         this.restClient = new RestClient(Configuration.BASE_URL);
     }
 
     public ResponseEntity<PaymentWrapper> buyCoins(PaymentMethod method) {
-        return restClient.get("/buyCoins/?method={method}", PaymentWrapper.class, method);
+        return restClient.get(BUY_COINS + "?method={method}", PaymentWrapper.class, method);
     }
 
     public ResponseEntity<PaymentWrapper> buyCoins(int amount) {
-        return restClient.get("/buyCoins/?amount={amount}", PaymentWrapper.class, amount);
+        return restClient.get(BUY_COINS + "?amount={amount}", PaymentWrapper.class, amount);
     }
 
     public ResponseEntity<PaymentWrapper> buyCoins(PaymentMethod method, int amount) {
-        return restClient.get("/buyCoins/?method={method}&amount={amount}", PaymentWrapper.class, method, amount);
+        return restClient.get(BUY_COINS + "?method={method}&amount={amount}", PaymentWrapper.class, method, amount);
     }
 
     public ResponseEntity<PaymentWrapper> coins(int amount) {
-        return restClient.get("/coins/?&amount={amount}", PaymentWrapper.class, amount);
+        return restClient.get(COINS+"?&amount={amount}", PaymentWrapper.class, amount);
     }
 }
